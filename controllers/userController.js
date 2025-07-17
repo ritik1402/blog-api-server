@@ -1,6 +1,5 @@
 import User from '../models/user.js';
 import Post from '../models/post.js';
-import Comment from '../models/comment.js';
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt"; 
 
@@ -35,7 +34,7 @@ export const loginUser = async (req, res) => {
         const  isValidPassword = await bcrypt.compare(password,user.password);
         if(!isValidPassword)
             return res.status(401).json({message: "Invalid Credentials"});
-        const token = jwt.sign({id:user.id},process.env.JWT_SECRET,{expiresIn:"1h"});
+        const token = jwt.sign({id:user.id},process.env.JWT_SECRET,{expiresIn:"1d"});
         res.status(200).json({user,token,message: "Login Successful"})
     }
     catch(err){
@@ -43,6 +42,8 @@ export const loginUser = async (req, res) => {
         res.status(500).json({message: err.message});
     }
 }
+
+
 
 
 

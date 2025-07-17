@@ -6,25 +6,23 @@ const Comment = sequelize.define("Comment", {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-    allowNull: false,
-    unique: true,
   },
   content: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  userId: {  
+  userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  postId: {  
+  postId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  parentId: {  
+  parentId: {
     type: DataTypes.INTEGER,
-    allowNull: true,
-  }
+    allowNull: true, 
+  },
 }, {
   timestamps: true,
 });

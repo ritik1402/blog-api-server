@@ -15,5 +15,10 @@ Post.hasMany(Comment, { foreignKey: "postId" });
 Comment.belongsTo(Post, { foreignKey: "postId" });
 
 
-Comment.hasMany(Comment, {  foreignKey: "parentId",  as: "replies",});
-Comment.belongsTo(Comment, {  foreignKey: "parentId",  as: "parent",});
+Comment.hasMany(Comment, { foreignKey: "parentId", as: "replies" });
+Comment.belongsTo(Comment, { foreignKey: "parentId", as: "parent" });
+
+
+
+
+
