@@ -14,13 +14,17 @@ const Post = sequelize.define('Post', {
     allowNull: false,
   },
   content: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   userId: {  
     type: DataTypes.INTEGER,
     allowNull: false,
-  }
+  },
+  image: {
+  type: DataTypes.STRING,
+  allowNull: true, 
+}
 });
 
 export default Post;

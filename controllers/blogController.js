@@ -7,15 +7,16 @@ import bcrypt from "bcrypt";
 export const createBlog = async (req, res) => {
   const { title, content } = req.body;
   const id = req.user.id;
-  console.log(id);
+  
   try {
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
+
     const blog = await Post.create({
       title,
       content,
       userId: id,
-
+      image,
     });
-console.log("blog created==============================>",blog);
 
     res.status(201).json({ blog, message: "Blog created successfully" });
   } catch (err) {
@@ -23,6 +24,7 @@ console.log("blog created==============================>",blog);
     res.status(500).json({ message: err.message });
   }
 };
+
 
 export const blogs = async (req, res) => {
   try {
@@ -35,8 +37,9 @@ export const blogs = async (req, res) => {
 };
 
 export const myBlog = async (req, res) => {
+  const id = req.user.id;
   try {
-    const blog = await Post.findAll({ where: { userId: req.user.id } });
+    const blog = await Post.findAll({ where: { userId: id } });
 
     if (!blog || blog.length === 0) {
       return res
@@ -44,7 +47,7 @@ export const myBlog = async (req, res) => {
         .json({ success: false, message: "No blogs found for this user." });
     }
 
-    res.status(200).json({ success: true, blog });
+    res.status(200).json(blog); 
   } catch (error) {
     console.error("Error fetching user blogs:", error);
     res.status(500).json({ success: false, error: error.message });
@@ -63,13 +66,14 @@ export const editBlog = async (req, res) => {
     }
 
     if (blog.userId !== req.user.id) {
-      return res
-        .status(403)
-        .json({ message: "Unauthorized to edit this blog" });
+      return res.status(403).json({ message: "Unauthorized to edit this blog" });
     }
+
+    const image = req.file ? `/uploads/${req.file.filename}` : blog.image;
 
     blog.title = title || blog.title;
     blog.content = content || blog.content;
+    blog.image = image;
 
     await blog.save();
 
@@ -79,6 +83,7 @@ export const editBlog = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 export const deleteBlog = async (req, res) => {
   const { id } = req.params;

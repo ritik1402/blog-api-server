@@ -9,8 +9,6 @@ import {sequelize} from "../config/db.js"
         autoIncrement: true,
         unique: true
     },
-
-    
     username : {
         type: DataTypes.STRING,
         allowNull: false,
@@ -22,8 +20,7 @@ import {sequelize} from "../config/db.js"
     },
     password:{
         type: DataTypes.STRING,
-        allowNull: false,
-        
+        allowNull: false,        
     }   
 })
 
