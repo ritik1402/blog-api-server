@@ -105,3 +105,31 @@ export const getComments = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const delComments = async (req, res) => {
+  try {
+    const commentId = req.params.id;
+    const comment = await Comment.findOne({ where: { id: commentId } });
+    if (!comment) {
+      return res.status(404).json({ message: "Comment not found" });
+    }
+    if (comment.userId !== req.user.id) {
+      return res.status(403).json({ message: "Unauthorized to delete comment" });
+    }   
+    const deleteReplies = async (parentId) => {
+      const replies = await Comment.findAll({ where: { parentId } });
+      for (const reply of replies) {
+        await deleteReplies(reply.id); 
+        await reply.destroy();
+      }
+    };   
+    await deleteReplies(comment.id);
+    await comment.destroy();
+
+    res.status(200).json({ message: "Comment deleted" });
+  } catch (error) {
+    console.error("Error deleting comment", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
